@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=cover">
-<title>OP·TCG Builder v2.1.3</title>
+<title>OP·TCG Builder v2.1.0</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=DM+Mono:wght@500&display=swap" rel="stylesheet">
 <style>
@@ -267,7 +267,7 @@ html,body{height:100%;background:var(--bg);color:var(--txt);font-family:'Noto Sa
 </div>
 
 <header class="hd">
-  <div class="logo" onclick="resetToSearch()" style="cursor:pointer;touch-action:manipulation"><span>OP</span>·TCG BUILDER <span style="font-size:9px;color:var(--txt3);font-weight:400;letter-spacing:0">v2.1.3</span></div>
+  <div class="logo" onclick="resetToSearch()" style="cursor:pointer;touch-action:manipulation"><span>OP</span>·TCG BUILDER <span style="font-size:9px;color:var(--txt3);font-weight:400;letter-spacing:0">v2.1.2</span></div>
   <button class="hbtn" id="hUnlockBtn" onclick="toggleUnlock()" title="枚数制限解除" style="display:none;font-size:18px">🔒</button>
   <button class="hbtn" id="hDkBtn" onclick="openMDk()" title="デッキ" style="display:none">
     🃏<span class="hbdg v" id="hDkBdg">0</span>
@@ -300,12 +300,10 @@ html,body{height:100%;background:var(--bg);color:var(--txt);font-family:'Noto Sa
   </div>
 
   <div class="page" id="pgDeck">
-    <div class="steps" id="stepBar">
-      <div class="step" id="st1"><div class="snum">1</div>リーダー</div>
-      <div class="sarow">→</div>
-      <div class="step" id="st2"><div class="snum">2</div>デッキ構築</div>
-      <div class="sarow">→</div>
-      <div class="step" id="st3"><div class="snum">3</div>保存</div>
+    <div class="steps" id="stepBar" style="display:none">
+      <div class="step" id="st1"></div>
+      <div class="step" id="st2"></div>
+      <div class="step" id="st3"></div>
     </div>
     <div id="stepLeader" style="flex:1;overflow-y:auto;padding:0 14px 20px">
       <div style="font-size:13px;color:var(--txt2);margin-bottom:12px">リーダーカードを選択してください<br><span style="font-size:11px;color:var(--txt3)">リーダーの色のカードのみデッキに追加できます</span></div>
@@ -318,15 +316,8 @@ html,body{height:100%;background:var(--bg);color:var(--txt);font-family:'Noto Sa
         <div class="dcnt"><span id="dPN">0</span><span style="font-size:9px;color:var(--txt2);font-weight:400"> / 50</span></div>
         <button class="fbtn" onclick="openFD2()">⚙<span class="fbdg" id="fBdg2"></span></button>
       </div>
-      <div class="dprog">
-        <div class="dprogbar"><div class="dprogf" id="dPF"></div></div>
-        <div class="dproginfo" style="justify-content:flex-end">
-          <div id="dPMsg" style="font-size:11px;color:var(--txt2)">あと50枚</div>
-        </div>
-      </div>
       <div class="dpanel">
         <div class="dcardsw"><div class="cg c5" id="dCGrid" style="padding:5px 5px 80px"></div></div>
-        <div id="dListBody" style="width:110px;overflow-y:auto;border-left:1px solid var(--brd);background:var(--sur);flex-shrink:0"></div>
       </div>
       <div class="dsavebar">
         <button class="btn btnd" onclick="clrDeck()">🗑</button>
@@ -531,7 +522,7 @@ html,body{height:100%;background:var(--bg);color:var(--txt);font-family:'Noto Sa
 
 <!-- カスタム確認モーダル (confirm代替) -->
 <div class="modal" id="customConfirmMod" style="z-index:9999;display:none">
-  <div class="mbk" onclick="customConfirmDismiss()"></div>
+  <div class="mbk" onclick="document.getElementById('customConfirmMod').classList.remove('open');document.getElementById('customConfirmMod').style.display='none'"></div>
   <div class="mbox" style="max-width:320px;padding:20px 20px 16px">
     <div id="ccMsg" style="font-size:14px;font-weight:700;margin-bottom:16px;white-space:pre-line;line-height:1.6"></div>
     <div style="display:flex;gap:8px;justify-content:flex-end">
@@ -546,7 +537,7 @@ html,body{height:100%;background:var(--bg);color:var(--txt);font-family:'Noto Sa
   <div class="mbk" onclick="customPromptCancel()"></div>
   <div class="mbox" style="max-width:320px;padding:20px 20px 16px">
     <div id="cpTitle" style="font-size:15px;font-weight:700;margin-bottom:14px"></div>
-    <input id="cpInput" type="text" style="width:100%;box-sizing:border-box;padding:10px 12px;font-size:15px;border-radius:10px;border:1px solid var(--brd);background:var(--sur2);color:var(--txt);outline:none;margin-bottom:14px" autocomplete="off" spellcheck="false">
+    <input id="cpInput" type="text" style="width:100%;box-sizing:border-box;padding:10px 12px;font-size:15px;border-radius:10px;border:1px solid var(--brd);background:var(--sur2);color:var(--txt1);outline:none;margin-bottom:14px" autocomplete="off" spellcheck="false">
     <div style="display:flex;gap:8px;justify-content:flex-end">
       <button class="btn btns" onclick="customPromptCancel()">キャンセル</button>
       <button class="btn btnp" id="cpOkBtn">OK</button>
@@ -580,7 +571,7 @@ html,body{height:100%;background:var(--bg);color:var(--txt);font-family:'Noto Sa
 
 <script>
 // ════════════════════════════════════════════════════════
-// OP·TCG BUILDER v2.1.3 — IndexedDB対応
+// OP·TCG BUILDER v2.1.0 — IndexedDB対応
 // DB: optcg_db v1
 //   stores: cards(keyPath:id), decks(keyPath:id), ui(keyPath:key)
 // ════════════════════════════════════════════════════════
@@ -790,10 +781,11 @@ function goStep(n){
   if(n===1){if(sl)sl.style.display='';if(sc)sc.style.display='none';renderLeaders();}
   else{if(sl)sl.style.display='none';if(sc){sc.style.display='flex';sc.style.flexDirection='column';}updDThumbs();doBuildSearch();updDkPanel();}
 }
-async function backToLeader(){
+function backToLeader(){
+  // カード追加中のみ確認ダイアログ（ステップ1は常にOK）
   const tot=Object.values(deck).reduce((s,n)=>s+n,0);
   if(tot>0&&leader){
-    if(!await customConfirm('リーダー選択に戻りますか？\n（追加済みのカードはリセットされます）','戻る'))return;
+    if(!confirm('リーダー選択に戻りますか？\n（追加済みのカードはリセットされます）'))return;
     deck={};updDkAll();
   }
   leader=null;goStep(1);
@@ -802,21 +794,21 @@ async function backToLeader(){
 function renderLeaders(){
   const leaders=getAllCards().filter(c=>c.type==='リーダー');
   const lg=document.getElementById('lGrid');if(!lg)return;
-  lg.innerHTML=leaders.map(c=>`<div class="lopt${leader&&leader.id===c.id?' sel':''}" onclick="selLeader('${c.id}',this)">
+  lg.innerHTML=leaders.map(c=>`<div class="lopt${leader&&leader.id===c.id?' sel':''}" onclick="selLeader('${c.id}')">
     <div class="loptico">${c.image?`<img src="${c.image}" alt="">`:'<div style="width:100%;height:100%;background:linear-gradient(135deg,var(--sur2),var(--sur3))"></div>'}</div>
   </div>`).join('');
 }
-async function selLeader(id,el){
+function selLeader(id){
   const all=getAllCards(),c=all.find(x=>x.id===id);if(!c)return;
   if(leader&&leader.id!==id){
     const lc=c.colors||[c.color];
     const bad=Object.keys(deck).filter(did=>{const d=all.find(x=>x.id===did);return d&&!(d.colors||[d.color]).some(col=>lc.includes(col));});
-    if(bad.length&&!await customConfirm(`リーダー変更により${bad.length}枚が除外されます。続けますか？`,'変更する'))return;
+    if(bad.length&&!confirm(`リーダー変更により${bad.length}枚が除外されます。続けますか？`))return;
     bad.forEach(did=>delete deck[did]);
   }
   leader=c;
-  document.querySelectorAll('.lopt').forEach(e=>e.classList.remove('sel'));
-  el?.classList.add('sel');
+  document.querySelectorAll('.lopt').forEach(el=>el.classList.remove('sel'));
+  event?.currentTarget?.classList.add('sel');
   toast(`${c.name} をリーダーに設定`);
   goStep(2);
 }
@@ -979,10 +971,9 @@ function addCard(id){
   const cur=deck[id]||0;
   const base=id.replace(/[★]+$|SP$/,'');
   const sameO=Object.entries(deck).filter(([k])=>k!==id&&k.replace(/[★]+$|SP$/,'')==base).reduce((s,[,n])=>s+n,0);
-  const max=unlocked?9999:4-sameO;
+  const max=unlocked?9999:Math.min(4,4-sameO);
   const deckMax=unlocked?9999:50;
   if(cur===0){
-    if(!unlocked&&sameO>=4){toast('同一カードは合計4枚までです');return;}
     if(Object.values(deck).reduce((s,n)=>s+n,0)>=deckMax){toast(`デッキは${deckMax}枚までです`);return;}
     deck[id]=1;
   }else if(cur<max){
@@ -998,10 +989,9 @@ function addCard(id){
   const b=document.getElementById('tbDkBdg');if(b){b.textContent=tot;b.classList.toggle('v',tot>0);}
   const hb=document.getElementById('hDkBdg');if(hb){hb.textContent=tot;hb.classList.toggle('v',tot>0);}
   const mk=document.getElementById('mdkBdg');if(mk)mk.textContent=tot;
-  updDkPanel();
 }
 function rmCard(id){if(!deck[id])return;deck[id]--;if(deck[id]<=0)delete deck[id];updDkAll();doBuildSearch();}
-async function clrDeck(){if(!await customConfirm('デッキをクリアしますか？','クリア'))return;deck={};updDkAll();doBuildSearch();}
+function clrDeck(){if(!confirm('デッキをクリアしますか？'))return;deck={};updDkAll();doBuildSearch();}
 function updDkAll(){
   const tot=Object.values(deck).reduce((s,n)=>s+n,0);
   const pct=Math.min(100,(tot/50)*100);
@@ -1043,7 +1033,6 @@ function updDkPanel(){
   b.innerHTML=rows;
 }
 // ════════ CUSTOM PROMPT (prompt()代替・iOS Safari対応) ════════
-let _ccResolve=null;
 let _cpResolve=null;
 function customPrompt(title,defaultVal){
   return new Promise(resolve=>{
@@ -1059,21 +1048,14 @@ function customPrompt(title,defaultVal){
     inp.onkeydown=e=>{if(e.key==='Enter')customPromptOk();if(e.key==='Escape')customPromptCancel();};
   });
 }
-function customConfirm(msg,okLabel){
+function customConfirm(msg){
   return new Promise(resolve=>{
-    _ccResolve=resolve;
     const mod=document.getElementById('customConfirmMod');
     document.getElementById('ccMsg').textContent=msg;
-    document.getElementById('ccOkBtn').textContent=okLabel||'OK';
     mod.style.display='';mod.classList.add('open');
-    document.getElementById('ccOkBtn').onclick=()=>{mod.classList.remove('open');mod.style.display='none';if(_ccResolve){_ccResolve(true);_ccResolve=null;}};
-    document.getElementById('ccCancelBtn').onclick=()=>{mod.classList.remove('open');mod.style.display='none';if(_ccResolve){_ccResolve(false);_ccResolve=null;}};
+    document.getElementById('ccOkBtn').onclick=()=>{mod.classList.remove('open');mod.style.display='none';resolve(true);};
+    document.getElementById('ccCancelBtn').onclick=()=>{mod.classList.remove('open');mod.style.display='none';resolve(false);};
   });
-}
-function customConfirmDismiss(){
-  const mod=document.getElementById('customConfirmMod');
-  mod.classList.remove('open');mod.style.display='none';
-  if(_ccResolve){_ccResolve(false);_ccResolve=null;}
 }
 
 function customPromptOk(){
@@ -1182,7 +1164,7 @@ function renderSaved(){
   sl.innerHTML=_decks.map((d,i)=>{
     const lr=all.find(c=>c.id===d.leader);
     const tot=Object.values(d.deck||{}).reduce((s,n)=>s+n,0);
-    return`<div class="scard" onclick="openDDMod('${d.id}')">
+    return`<div class="scard" onclick="openDDMod(${i})">
       <div class="semo">${lr&&lr.image?`<img src="${lr.image}" style="width:32px;height:32px;object-fit:cover;border-radius:4px" alt="">`:''}</div>
       <div class="sinfo"><div class="sname">${d.unlocked?'🔓 ':''}${d.name}</div>
       <div class="smeta"><span>${lr?lr.name:'?'}</span><span>${lr?(lr.colors||[]).join('/'):'?'}色</span><span>${tot}枚</span><span>${d.date||''}</span></div></div>
@@ -1200,12 +1182,12 @@ function loadDeck(deckId){
   toast(`「${d.name}」を読み込みました`);
 }
 async function delDeck(deckId){
-  if(!await customConfirm('削除しますか？','削除する'))return;
+  if(!confirm('削除しますか？'))return;
   try{await dbDel('decks',deckId);_decks=await dbGetAll('decks');renderSaved();toast('削除しました');}
   catch(e){toast('❌ 削除エラー');}
 }
-function openDDMod(deckId){
-  const d=_decks.find(x=>x.id===deckId);if(!d)return;
+function openDDMod(i){
+  const d=_decks[i];if(!d)return;
   const all=getAllCards(),lr=all.find(c=>c.id===d.leader);
   const tot=Object.values(d.deck||{}).reduce((s,n)=>s+n,0);
   document.getElementById('ddEmo').textContent='';
@@ -1372,7 +1354,7 @@ async function submitCard(){
   if(!rColors.length){toast('色を選択してください');return;}
   const id=no;
   const exIdx=_cards.findIndex(c=>c.id===id);
-  if(!editId&&exIdx>=0&&!await customConfirm(`ID "${id}" は既に存在します。上書きしますか？`,'上書き'))return;
+  if(!editId&&exIdx>=0&&!confirm(`ID "${id}" は既に存在します。上書きしますか？`))return;
   const nc={
     id,name,type:rType,color:rColors[0],colors:[...rColors],
     cost:parseInt(document.getElementById('rCost')?.value)||rStats.cost||0,
@@ -1438,7 +1420,7 @@ function editCard(id){
   },50);
 }
 async function delCard(id){
-  if(!await customConfirm('削除しますか？','削除する'))return;
+  if(!confirm('削除しますか？'))return;
   try{await dbDel('cards',id);_cards=await dbGetAll('cards');delete deck[id];updDkAll();renderMg();doSearch();toast('削除しました');}
   catch(e){toast('❌ 削除エラー');}
 }
@@ -1522,7 +1504,7 @@ async function importJsonCards(arr){
       life:type==='リーダー'?5:undefined,trait:d.affiliation||d.trait||'',attr:d.attribute||d.attr||'',
       effect:d.effect&&d.effect!=='なし'?d.effect:'',rarity:d.rarity||'C',
       set:id.replace(/-\d+$/,''),emoji:'',parallel,isCustom:true,
-      image:d.image||ex?.image||null};  // JSONのimageを優先、なければ既存DBのものを引き継ぐ
+      image:nc.image||ex?.image||null};  // JSONのimageを優先、なければ既存DBのものを引き継ぐ
     if(ex)updated++;else added++;
     toSave.push(nc);
   });
