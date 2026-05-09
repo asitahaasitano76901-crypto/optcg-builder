@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=cover">
-<title>OP·TCG Builder v2.1.3</title>
+<title>OP·TCG Builder v2.2.0</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=DM+Mono:wght@500&display=swap" rel="stylesheet">
 <style>
@@ -256,6 +256,44 @@ html,body{height:100%;background:var(--bg);color:var(--txt);font-family:'Noto Sa
 .ddcrn{font-size:12px}
 .ddcrc{font-size:12px;color:var(--gold);font-weight:900}
 .ddbtns{display:flex;gap:8px;padding:0 16px}
+/* ═══ Spoiler / Progress Tracker ═══ */
+.sppage{display:flex;flex-direction:column;overflow:hidden}
+.sptopbar{padding:8px 10px;display:flex;gap:6px;align-items:center;border-bottom:1px solid var(--brd);flex-shrink:0;overflow-x:auto;scrollbar-width:none;white-space:nowrap;-webkit-overflow-scrolling:touch}
+.sptopbar::-webkit-scrollbar{display:none}
+.spchip{padding:5px 12px;border-radius:20px;background:var(--sur2);border:1px solid var(--brd2);color:var(--txt2);font-size:12px;font-weight:700;cursor:pointer;flex-shrink:0;touch-action:manipulation}
+.spchip.on{background:var(--gold);border-color:var(--gold);color:#000}
+.spcfgbtn{width:30px;height:30px;border-radius:50%;background:var(--sur2);border:1px solid var(--brd2);color:var(--txt2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;touch-action:manipulation}
+.sphdr{padding:10px 14px;background:var(--sur2);border-bottom:1px solid var(--brd);flex-shrink:0}
+.sphdr-row1{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.spsetname{font-size:17px;font-weight:900}
+.spcnt{font-size:12px;color:var(--txt2)}
+.spbar{height:5px;background:var(--sur3);border-radius:3px;overflow:hidden;margin-bottom:7px}
+.spbar-f{height:100%;background:var(--gold);border-radius:3px;transition:width .4s}
+.spbar-f.full{background:#22c55e}
+.sphdr-row2{display:flex;justify-content:space-between;align-items:center}
+.sprarstats{display:flex;gap:5px;flex-wrap:wrap}
+.sprarsbox{background:var(--sur);border-radius:7px;padding:4px 7px;display:flex;flex-direction:column;align-items:center;min-width:42px}
+.sprars-n{font-size:11px;font-weight:900}
+.sprars-l{font-size:8px;color:var(--txt3);letter-spacing:.5px;margin-top:1px}
+.sprem{font-size:11px;color:var(--txt3);flex-shrink:0}
+.spgrid-wrap{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:6px}
+.spgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:3px}
+.spslot{border-radius:7px;aspect-ratio:.716;overflow:hidden;position:relative;background:var(--sur);border:1px solid var(--brd)}
+.spslot.reg{border-color:var(--brd2)}
+.spslot img{width:100%;height:100%;object-fit:cover;display:block}
+.spslot-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:7.5px;font-family:'DM Mono';color:var(--txt3);text-align:center;padding:3px;line-height:1.4;word-break:break-all}
+/* Set Config Drawer */
+.spcfg-row{display:flex;align-items:center;padding:10px 0;border-bottom:1px solid var(--brd);gap:8px}
+.spcfg-setid{font-size:13px;font-weight:700;flex:1}
+.spcfg-setbtn{height:28px;padding:0 10px;border-radius:6px;background:var(--sur2);border:1px solid var(--brd2);color:var(--txt);font-size:11px;cursor:pointer;white-space:nowrap}
+/* Per-set modal */
+.scmod-inputs{display:flex;flex-direction:column;gap:8px}
+.scmod-row{display:flex;align-items:center;gap:10px}
+.scmod-label{font-size:12px;font-weight:900;width:34px;text-align:right;flex-shrink:0}
+.scmod-inp{flex:1;background:var(--sur2);border:1px solid var(--brd2);border-radius:8px;padding:7px 10px;color:var(--txt);font-family:'Noto Sans JP',sans-serif;font-size:14px;outline:none;text-align:center}
+.scmod-inp:focus{border-color:var(--gold)}
+/* Rarity colors */
+.rc-L{color:#e8a200}.rc-C{color:#8b95a8}.rc-UC{color:#60a5fa}.rc-R{color:#3b82f6}.rc-SR{color:#a855f7}.rc-SEC{color:#f59e0b}.rc-P{color:#f97316}.rc-SP{color:#ec4899}
 </style>
 </head>
 <body>
@@ -267,7 +305,7 @@ html,body{height:100%;background:var(--bg);color:var(--txt);font-family:'Noto Sa
 </div>
 
 <header class="hd">
-  <div class="logo" onclick="resetToSearch()" style="cursor:pointer;touch-action:manipulation"><span>OP</span>·TCG BUILDER <span style="font-size:9px;color:var(--txt3);font-weight:400;letter-spacing:0">v2.1.3</span></div>
+  <div class="logo" onclick="resetToSearch()" style="cursor:pointer;touch-action:manipulation"><span>OP</span>·TCG BUILDER <span style="font-size:9px;color:var(--txt3);font-weight:400;letter-spacing:0">v2.2.0</span></div>
   <button class="hbtn" id="hUnlockBtn" onclick="toggleUnlock()" title="枚数制限解除" style="display:none;font-size:18px">🔒</button>
   <button class="hbtn" id="hDkBtn" onclick="openMDk()" title="デッキ" style="display:none">
     🃏<span class="hbdg v" id="hDkBdg">0</span>
@@ -443,6 +481,12 @@ html,body{height:100%;background:var(--bg);color:var(--txt);font-family:'Noto Sa
     </div>
   </div>
 
+  <div class="page sppage" id="pgSpoiler">
+    <div class="sptopbar" id="spSetBar"></div>
+    <div id="spHdr"></div>
+    <div class="spgrid-wrap"><div class="spgrid" id="spGrid"></div></div>
+  </div>
+
   <div class="page mgpg" id="pgMg">
     <div class="mgtool">
       <div class="mgchip on" data-mf="all" onclick="setMF(this)">すべて</div>
@@ -470,6 +514,7 @@ html,body{height:100%;background:var(--bg);color:var(--txt);font-family:'Noto Sa
   <div class="tbt" id="tabList" onclick="goTab('list')"><div class="tbi">📋</div>デッキ一覧</div>
   <div class="tbt" id="tabReg" onclick="goTab('reg')"><div class="tbi">➕</div>カード登録</div>
   <div class="tbt" id="tabMg" onclick="goTab('mg')"><div class="tbi">🗂️</div>カード管理</div>
+  <div class="tbt" id="tabSpoiler" onclick="goTab('spoiler')"><div class="tbi">📊</div>進捗</div>
 </nav>
 
 <div class="ov" id="fOv" onclick="closeFD()"></div>
@@ -554,6 +599,45 @@ html,body{height:100%;background:var(--bg);color:var(--txt);font-family:'Noto Sa
   </div>
 </div>
 
+<!-- セット設定ドロワー -->
+<div class="ov" id="spCfgOv" onclick="closeSpCfg()"></div>
+<div class="drw" id="spCfgDrw">
+  <div class="dh"><div class="dhandle"></div><div class="dtit">セット設定</div><button class="dcls" onclick="closeSpCfg()">✕</button></div>
+  <div class="dbody">
+    <div style="font-size:11px;color:var(--txt3);margin-bottom:10px;line-height:1.7">登録済みカードから自動検出されたセット一覧です。<br>合計枚数とレアリティ内訳を設定してください。</div>
+    <div id="spCfgList"></div>
+    <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--brd)">
+      <div style="font-size:11px;font-weight:700;color:var(--txt2);margin-bottom:8px">セットを手動追加</div>
+      <div style="display:flex;gap:8px">
+        <input class="sinp" id="spNewSetId" placeholder="例: OP17" style="height:36px;font-size:13px" autocomplete="off" autocapitalize="characters">
+        <button class="fbtn" style="height:36px;padding:0 14px;font-size:12px" onclick="addManualSet()">追加</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- セット個別設定モーダル -->
+<div class="modal" id="scMod" style="z-index:9999;display:none">
+  <div class="mbk" onclick="closeScMod()"></div>
+  <div class="mbox" style="max-width:320px;background:var(--sur);border-radius:16px;padding:20px">
+    <div id="scModTitle" style="font-size:15px;font-weight:900;margin-bottom:14px"></div>
+    <div class="scmod-inputs">
+      <div class="scmod-row"><span class="scmod-label">合計</span><input class="scmod-inp" id="scTotal" type="number" placeholder="119" min="0"></div>
+      <div class="scmod-row"><span class="scmod-label rc-L">L</span><input class="scmod-inp" id="scL" type="number" placeholder="0" min="0"></div>
+      <div class="scmod-row"><span class="scmod-label rc-SEC">SEC</span><input class="scmod-inp" id="scSEC" type="number" placeholder="0" min="0"></div>
+      <div class="scmod-row"><span class="scmod-label rc-SR">SR</span><input class="scmod-inp" id="scSR" type="number" placeholder="0" min="0"></div>
+      <div class="scmod-row"><span class="scmod-label rc-R">R</span><input class="scmod-inp" id="scR" type="number" placeholder="0" min="0"></div>
+      <div class="scmod-row"><span class="scmod-label rc-UC">UC</span><input class="scmod-inp" id="scUC" type="number" placeholder="0" min="0"></div>
+      <div class="scmod-row"><span class="scmod-label rc-C">C</span><input class="scmod-inp" id="scC" type="number" placeholder="0" min="0"></div>
+      <div class="scmod-row"><span class="scmod-label rc-P">P</span><input class="scmod-inp" id="scP" type="number" placeholder="0" min="0"></div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:16px">
+      <button class="btn btns" onclick="closeScMod()" style="flex:1;height:40px">キャンセル</button>
+      <button class="btn btnp" onclick="saveScMod()" style="flex:1;height:40px">保存</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toastEl"></div>
 <div class="aiov" id="aiOv"><div style="font-size:40px">✨</div><div class="aistep" id="aiStep">解析中…</div></div>
 <input type="file" id="impFile" accept=".json" style="display:none" onchange="onImp(event)">
@@ -580,7 +664,7 @@ html,body{height:100%;background:var(--bg);color:var(--txt);font-family:'Noto Sa
 
 <script>
 // ════════════════════════════════════════════════════════
-// OP·TCG BUILDER v2.1.3 — IndexedDB対応
+// OP·TCG BUILDER v2.2.0 — IndexedDB対応
 // DB: optcg_db v1
 //   stores: cards(keyPath:id), decks(keyPath:id), ui(keyPath:key)
 // ════════════════════════════════════════════════════════
@@ -594,7 +678,7 @@ function norm(str){return toHira((str||'').toLowerCase());}
 const CARDS=[];
 
 // ════════ IndexedDB層 ════════
-const DB_NAME='optcg_db', DB_VER=1;
+const DB_NAME='optcg_db', DB_VER=2;
 let _db=null;
 function openDB(){
   return new Promise((res,rej)=>{
@@ -610,6 +694,7 @@ function openDB(){
         if(!db.objectStoreNames.contains('cards'))db.createObjectStore('cards',{keyPath:'id'});
         if(!db.objectStoreNames.contains('decks'))db.createObjectStore('decks',{keyPath:'id'});
         if(!db.objectStoreNames.contains('ui'))db.createObjectStore('ui',{keyPath:'key'});
+        if(!db.objectStoreNames.contains('sets'))db.createObjectStore('sets',{keyPath:'id'});
       }catch(e2){clearTimeout(timer);rej(e2);}
     };
     req.onsuccess=e=>{clearTimeout(timer);_db=e.target.result;res(_db);};
@@ -651,7 +736,7 @@ function dbPutBatch(st,items,onProg){
 }
 
 // ════════ キャッシュ ════════
-let _cards=[], _decks=[];
+let _cards=[], _decks=[], _sets=[];
 function getAllCards(){return[...CARDS,..._cards];}
 
 // ════════ localStorageマイグレーション ════════
@@ -701,7 +786,8 @@ async function initApp(){
         if(c.image&&c.image.startsWith(OLD_CDN))return{...c,image:NEW_CDN+c.image.slice(OLD_CDN.length)};
         return c;
       });
-      _decks=await dbGetAll('decks');sf(90);
+      _decks=await dbGetAll('decks');
+      _sets=await dbGetAll('sets');sf(90);
       await loadUIFromDB();sf(100);sm('完了');
       setTimeout(()=>{if(ov)ov.style.display='none';doSearch();},200);
       return;  // 成功
@@ -767,8 +853,8 @@ function goTab(t){
   curTab=t;
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('act'));
   document.querySelectorAll('.tbt').forEach(b=>b.classList.remove('on'));
-  const pg={search:'pgSearch',deck:'pgDeck',list:'pgList',reg:'pgReg',mg:'pgMg'};
-  const tb={search:'tabSearch',deck:'tabDeck',list:'tabList',reg:'tabReg',mg:'tabMg'};
+  const pg={search:'pgSearch',deck:'pgDeck',list:'pgList',reg:'pgReg',mg:'pgMg',spoiler:'pgSpoiler'};
+  const tb={search:'tabSearch',deck:'tabDeck',list:'tabList',reg:'tabReg',mg:'tabMg',spoiler:'tabSpoiler'};
   document.getElementById(pg[t])?.classList.add('act');
   document.getElementById(tb[t])?.classList.add('on');
   const hdk=document.getElementById('hDkBtn');
@@ -778,6 +864,7 @@ function goTab(t){
   if(t==='list')renderSaved();
   if(t==='mg')renderMg();
   if(t==='deck')goStep(leader?2:1);
+  if(t==='spoiler')renderSpoiler();
 }
 
 // ════════ STEPS ════════
@@ -1547,6 +1634,191 @@ async function loadUIFromDB(){
     if(data.filters)Object.entries(data.filters).forEach(([k,vals])=>{if(!F[k])return;vals.forEach(v=>{F[k].add(v);const el=document.querySelector(`[data-f="${k}"][data-v="${v}"]`);if(el)el.classList.add('on');});});
     updFBdg();
   }catch(e){}
+}
+
+// ════════════════════════════════════════════════════════
+// SPOILER / PROGRESS TRACKER
+// ════════════════════════════════════════════════════════
+const SP_RAR_ORDER=['L','SEC','SR','R','UC','C','P','SP'];
+const SP_RAR_COLOR={L:'#e8a200',C:'#8b95a8',UC:'#60a5fa',R:'#3b82f6',SR:'#a855f7',SEC:'#f59e0b',P:'#f97316',SP:'#ec4899'};
+let curSet=null, _scEditId=null;
+
+function extractSetId(id){
+  const m=(id||'').match(/^([A-Za-z]+\d*)/);
+  return m?m[1].toUpperCase():null;
+}
+
+function autoDetectSetIds(){
+  const s=new Set();
+  getAllCards().forEach(c=>{const sid=extractSetId(c.id);if(sid)s.add(sid);});
+  return[...s].sort((a,b)=>a.localeCompare(b,'en',{numeric:true}));
+}
+
+// Deduplicated base-card map for a set: baseId → card (prefer base over parallel)
+function buildBaseMap(setId){
+  const map=new Map();
+  getAllCards().filter(c=>extractSetId(c.id)===setId).forEach(c=>{
+    const base=c.id.replace(/[★]+$|SP$/,'');
+    if(!map.has(base)||c.id===base)map.set(base,c);
+  });
+  return map;
+}
+
+function renderSpoiler(){
+  const configured=_sets.filter(s=>s.total>0);
+  const detected=autoDetectSetIds();
+  const chipIds=detected.filter(id=>configured.find(s=>s.id===id));
+
+  // chips row
+  const setBar=document.getElementById('spSetBar');
+  if(setBar){
+    if(!curSet&&chipIds.length)curSet=chipIds[0];
+    const chips=chipIds.map(id=>
+      `<div class="spchip${id===curSet?' on':''}" onclick="selSet('${id}')">${id}</div>`
+    ).join('');
+    setBar.innerHTML=chips+`<button class="spcfgbtn" title="セット設定" onclick="openSpCfg()">⚙</button>`;
+  }
+
+  const hdr=document.getElementById('spHdr');
+  const grid=document.getElementById('spGrid');
+
+  if(!curSet||!configured.find(s=>s.id===curSet)){
+    if(hdr)hdr.innerHTML='';
+    if(grid)grid.innerHTML=`<div style="grid-column:1/-1;padding:40px 20px;text-align:center;color:var(--txt3);font-size:13px;line-height:1.8">⚙ ボタンからセットを設定してください</div>`;
+    return;
+  }
+  renderSpHeader();
+  renderSpGrid();
+}
+
+function selSet(id){curSet=id;renderSpoiler();}
+
+function renderSpHeader(){
+  const cfg=_sets.find(s=>s.id===curSet);if(!cfg)return;
+  const baseMap=buildBaseMap(curSet);
+  const reg=baseMap.size;
+  const total=cfg.total||0;
+  const rem=Math.max(0,total-reg);
+  const pct=total?Math.min(100,reg/total*100):0;
+
+  // registered count per rarity
+  const regByRar={};
+  for(const[,c]of baseMap)regByRar[c.rarity]=(regByRar[c.rarity]||0)+1;
+
+  const rar=cfg.rarities||{};
+  const rarHtml=SP_RAR_ORDER.filter(r=>rar[r]||regByRar[r]).map(r=>{
+    const rv=regByRar[r]||0,tv=rar[r]||0;
+    const col=SP_RAR_COLOR[r]||'var(--txt2)';
+    return`<div class="sprarsbox"><div class="sprars-n" style="color:${col}">${tv?`${rv}/${tv}`:rv}</div><div class="sprars-l">${r}</div></div>`;
+  }).join('');
+
+  const hdr=document.getElementById('spHdr');
+  if(hdr)hdr.innerHTML=`<div class="sphdr">
+    <div class="sphdr-row1">
+      <span class="spsetname">${curSet}</span>
+      <span class="spcnt">登録済 <strong>${reg}</strong> / ${total}</span>
+    </div>
+    <div class="spbar"><div class="spbar-f${reg>=total&&total>0?' full':''}" style="width:${pct.toFixed(1)}%"></div></div>
+    <div class="sphdr-row2">
+      <div class="sprarstats">${rarHtml}</div>
+      <div class="sprem">残り ${rem}</div>
+    </div>
+  </div>`;
+}
+
+function renderSpGrid(){
+  const cfg=_sets.find(s=>s.id===curSet);if(!cfg)return;
+  const total=cfg.total||0;
+  const g=document.getElementById('spGrid');if(!g)return;
+  if(!total){
+    g.innerHTML=`<div style="grid-column:1/-1;padding:20px;text-align:center;color:var(--txt3);font-size:12px">合計枚数が未設定です</div>`;
+    return;
+  }
+
+  // build lookup: baseId → card
+  const lookup={};
+  getAllCards().filter(c=>extractSetId(c.id)===curSet).forEach(c=>{
+    const base=c.id.replace(/[★]+$|SP$/,'');
+    if(!lookup[base]||c.id===base)lookup[base]=c;
+  });
+
+  let html='';
+  for(let i=1;i<=total;i++){
+    const num=String(i).padStart(3,'0');
+    const sid=`${curSet}-${num}`;
+    const card=lookup[sid]||null;
+    if(card){
+      html+=`<div class="spslot reg">${card.image?`<img src="${card.image}" alt="">`:`<div class="spslot-num">${num}</div>`}</div>`;
+    }else{
+      html+=`<div class="spslot"><div class="spslot-num">${num}</div></div>`;
+    }
+  }
+  g.innerHTML=html;
+}
+
+// ─── Set Config Drawer ───
+function openSpCfg(){
+  const detected=autoDetectSetIds();
+  const allIds=[...new Set([..._sets.map(s=>s.id),...detected])].sort((a,b)=>a.localeCompare(b,'en',{numeric:true}));
+  const list=document.getElementById('spCfgList');
+  if(list){
+    list.innerHTML=allIds.length?allIds.map(id=>{
+      const cfg=_sets.find(s=>s.id===id);
+      const total=cfg?.total||0;
+      return`<div class="spcfg-row">
+        <div class="spcfg-setid">${id}</div>
+        <div style="font-size:11px;color:var(--txt3)">${total?`${total}枚`:'未設定'}</div>
+        <button class="spcfg-setbtn" onclick="openScMod('${id}')">設定</button>
+      </div>`;
+    }).join(''):'<div style="padding:16px 0;text-align:center;color:var(--txt3);font-size:12px">カードが登録されていません</div>';
+  }
+  document.getElementById('spCfgOv')?.classList.add('open');
+  document.getElementById('spCfgDrw')?.classList.add('open');
+}
+function closeSpCfg(){
+  document.getElementById('spCfgOv')?.classList.remove('open');
+  document.getElementById('spCfgDrw')?.classList.remove('open');
+}
+function addManualSet(){
+  const inp=document.getElementById('spNewSetId');
+  const id=(inp?.value||'').trim().toUpperCase();
+  if(!id){toast('セットIDを入力してください');return;}
+  inp.value='';
+  closeSpCfg();
+  openScMod(id);
+}
+
+// ─── Per-set Config Modal ───
+function openScMod(id){
+  _scEditId=id;
+  const cfg=_sets.find(s=>s.id===id)||{};
+  const rar=cfg.rarities||{};
+  document.getElementById('scModTitle').textContent=`${id} 設定`;
+  document.getElementById('scTotal').value=cfg.total||'';
+  ['L','SEC','SR','R','UC','C','P'].forEach(r=>{
+    const el=document.getElementById('sc'+r);if(el)el.value=rar[r]||'';
+  });
+  const mod=document.getElementById('scMod');
+  mod.style.display='flex';mod.classList.add('open');
+}
+function closeScMod(){
+  const mod=document.getElementById('scMod');
+  mod.classList.remove('open');mod.style.display='none';
+}
+async function saveScMod(){
+  if(!_scEditId)return;
+  const total=parseInt(document.getElementById('scTotal').value)||0;
+  const rarities={};
+  ['L','SEC','SR','R','UC','C','P'].forEach(r=>{
+    const v=parseInt(document.getElementById('sc'+r)?.value)||0;
+    if(v)rarities[r]=v;
+  });
+  await dbPut('sets',{id:_scEditId,total,rarities});
+  _sets=await dbGetAll('sets');
+  closeScMod();
+  if(!curSet)curSet=_scEditId;
+  renderSpoiler();
+  toast(`${_scEditId} の設定を保存しました`);
 }
 
 let tTO;
